@@ -7,24 +7,30 @@ class Server(object):
     @Pyro4.expose
     def welcomeMessage(self, name):
         return ('Olá, Bem vindo!' + str(name))
-
+    
+    @Pyro4.expose
     def uploadFile(self, filename, text):
             filepath = os.path.join('server_data', filename)
             with open(filepath, 'w') as f:
                 f.write(text)
-
+    
+    @Pyro4.expose
     def listFiles(self):
         files = os.listdir('server_data')
         if len(files) == 0:
                 return('O diretório do servidor está vazio')
         else:
             return(files)
-
+    
+    @Pyro4.expose
     def downloadFile(self, filename):
+        if filename in self.register:
+            self.register.remove(filename)
         with open(f'server_data/{filename}', 'r') as f:
             text = f.read()
         return(text)
-
+    
+    @Pyro4.expose
     def registerNotification(self):
         if len(self.register) == 0:
             return ''
@@ -34,6 +40,7 @@ class Server(object):
                 if f in self.register:
                     return(f'O arquivo {f} já está disponível para download!\n')
     
+    @Pyro4.expose
     def registerAtt(self, self_register, state):
         if state == True:
             self.register.append(self_register)
