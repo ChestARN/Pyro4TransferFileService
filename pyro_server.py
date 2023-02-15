@@ -51,7 +51,6 @@ class Server(object):
         return 'Esse registro não existe.'
         
 
-
 def startServer():
     server = Server()
     daemon = Pyro4.Daemon()
@@ -60,6 +59,7 @@ def startServer():
     ns.register('server', uri)
     print(f'Ready. object uri = {uri}')
     daemon.requestLoop()
+
 
 if __name__ == '__main__':
     startServer()
